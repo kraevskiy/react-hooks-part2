@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
 
 import useFetch from "../../hooks/useFetch"
@@ -7,12 +7,13 @@ import useFetch from "../../hooks/useFetch"
 const Authentication = props => {
 	const isLogin = props.location.pathname === '/login'
 	const pageTitle = isLogin ? 'Sign in' : 'Sign up'
-	const descriptionLink = isLogin ? '/registe' : '/login'
+	const descriptionLink = isLogin ? '/register' : '/login'
 	const descriptionText = isLogin ? 'Need an Account?' : 'Have an account'
 	const apiUrl = isLogin ? '/users/login?' : '/users'
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [username, setUsername] = useState('')
+	const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false)
 	const [{response, isLoading, error}, doFetch] = useFetch(apiUrl)
 
 	const handleSubmit = event => {
@@ -22,6 +23,16 @@ const Authentication = props => {
 			method: 'POST',
 			data: {user}
 		})
+	}
+
+	useEffect(() => {
+		if(!response) return
+		localStorage.setItem('token', response.user.token)
+		setIsSuccessfulSubmit(true)
+	},[response])
+
+	if(isSuccessfulSubmit){
+		return <Redirect to='/' />
 	}
 
 	return (

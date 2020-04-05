@@ -1,10 +1,14 @@
 import React from 'react'
+import {BrowserRouter as Router} from "react-router-dom"
+import Routes from './routes'
+import TopBar from './components/topBar'
 
 function App() {
 	return (
-		<div className="App">
-			hello hooks
-		</div>
+		<Router>
+			<TopBar />
+			<Routes />
+		</Router>
 	);
 }
 

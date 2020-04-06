@@ -5,6 +5,10 @@ import Feed from "../../components/Feed"
 import Pagination from "../../components/Pagination"
 import {getPaginator, limit} from "../../utils/parseUrl"
 import {stringify} from "query-string"
+import PopularTags from "../../components/PopularTags"
+import Loading from "../../components/Loading"
+import ErrorMessage from "../../components/ErrorMessage"
+import FeedToggler from "../../components/FeedToggler";
 
 const GlobalFeed = ({location, match}) => {
 	const {offset, currentPage} = getPaginator(location.search)
@@ -29,8 +33,9 @@ const GlobalFeed = ({location, match}) => {
 			<div className="container page">
 				<div className="row">
 					<div className="col-md-9">
-						{isLoading && <div>Loading</div>}
-						{error && <div>Error</div>}
+						<FeedToggler />
+						{isLoading && <Loading/>}
+						{error && <ErrorMessage/>}
 						{!isLoading && response && (
 							<Fragment>
 								<Feed articles={response.articles} />
@@ -43,11 +48,7 @@ const GlobalFeed = ({location, match}) => {
 						)}
 					</div>
 					<div className="col-md-3">
-						<div className="sidebar"><p>Popular Tags</p>
-							<div className="tag-list">
-								<a href='/' className="tag-default tag-pill"> test </a>
-							</div>
-						</div>
+						<PopularTags/>
 					</div>
 				</div>
 			</div>

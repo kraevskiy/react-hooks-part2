@@ -88,7 +88,6 @@ const Authentication = props => {
 								</fieldset>
 							</fieldset>
 
-							<div className="spinner-border text-primary" role="status"></div>
 							<button
 								className="d-flex ml-auto btn btn-lg pull-left btn-success"
 								type="submit"

@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {Link, Redirect} from "react-router-dom";
-import axios from "axios"
 
+import useLocalStorage from '../../hooks/useLocalStorage'
 import useFetch from "../../hooks/useFetch"
+import {CurrentUserContext} from "../../context/curentUser/currentUserContext"
+import BackendErrorMessages from "./component/BackendErrorMessages"
 
 const Authentication = props => {
 	const isLogin = props.location.pathname === '/login'
@@ -15,6 +17,9 @@ const Authentication = props => {
 	const [username, setUsername] = useState('')
 	const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false)
 	const [{response, isLoading, error}, doFetch] = useFetch(apiUrl)
+	const [, setToken] = useLocalStorage('token')
+	const [, setCurrentUserState] = useContext(CurrentUserContext)
+
 
 	const handleSubmit = event => {
 		event.preventDefault()
@@ -26,13 +31,19 @@ const Authentication = props => {
 	}
 
 	useEffect(() => {
-		if(!response) return
-		localStorage.setItem('token', response.user.token)
+		if (!response) return
+		setToken(response.user.token)
 		setIsSuccessfulSubmit(true)
-	},[response])
+		setCurrentUserState(state => ({
+			...state,
+			isLoggedIn: true,
+			isLoading: false,
+			currentUser: response.user
+		}))
+	}, [response, setToken, setCurrentUserState])
 
-	if(isSuccessfulSubmit){
-		return <Redirect to='/' />
+	if (isSuccessfulSubmit) {
+		return <Redirect to='/'/>
 	}
 
 	return (
@@ -44,6 +55,7 @@ const Authentication = props => {
 						<p className="text-center">
 							<Link className="btn btn-link text-success" to={descriptionLink}>{descriptionText}</Link>
 						</p>
+						{error && <BackendErrorMessages backendErrors={error.errors}/>}
 						<form onSubmit={handleSubmit}>
 							<fieldset>
 								{

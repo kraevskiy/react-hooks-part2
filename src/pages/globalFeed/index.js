@@ -36,7 +36,7 @@ const GlobalFeed = ({location, match}) => {
 					<div className="col-md-9">
 						<FeedToggler />
 						{isLoading && <Loading/>}
-						{error && <ErrorMessage/>}
+						{error !== null && error !== false && <ErrorMessage/>}
 						{!isLoading && response && (
 							<Fragment>
 								<Feed articles={response.articles} />

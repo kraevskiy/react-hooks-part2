@@ -2,6 +2,12 @@ import React from 'react'
 import {Link} from "react-router-dom"
 
 const Feed = ({articles}) => {
+	if(!articles.length) return (
+		<div className="alert alert-primary" role="alert">
+			Didn't have feed!
+		</div>
+	)
+
 	return (
 		<div>
 			{articles.map((article, index) => (

@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {Link, Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom"
 
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useFetch from "../../hooks/useFetch"
 import {CurrentUserContext} from "../../context/curentUser/currentUserContext"
-import BackendErrorMessages from "./component/BackendErrorMessages"
+import BackendErrorMessages from "../../components/BackendErrorMessages"
 import {SET_AUTHORIZED} from "../../context/types"
 
 const Authentication = props => {

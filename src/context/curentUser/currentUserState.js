@@ -3,14 +3,14 @@ import {} from '../types'
 import {CurrentUserContext} from './currentUserContext'
 import {currentUserReducer} from "./currentUserReducer";
 
-const initialState = {
+export const initialStateUser = {
 	isLoading: false,
 	isLoggedIn: null,
 	currentUser: null
 }
 
 export const CurrentUserState = ({children}) => {
-	const state = useReducer(currentUserReducer, initialState)
+	const state = useReducer(currentUserReducer, initialStateUser)
 	return(
 		<CurrentUserContext.Provider
 			value={state}

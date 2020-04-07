@@ -34,11 +34,17 @@ const TopBar = () => {
 									</NavLink>
 								</li>
 								<li className="nav-item mr-2 ml-2">
+									<NavLink to={'/settings'} className="nav-link">
+										<i className="ion-gear-a"></i>
+										Setings
+									</NavLink>
+								</li>
+								<li className="nav-item mr-2 ml-2">
 									<NavLink to={`/profiles/${currentUserState.currentUser.username}`} className="nav-link">
 										{
 											currentUserState.currentUser.image && (
 												<img
-													src=""
+													src={currentUserState.currentUser.image}
 													className="rounded"
 													style={{
 														maxWidth: 100

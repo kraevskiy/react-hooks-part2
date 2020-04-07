@@ -28,7 +28,7 @@ const TopBar = () => {
 						currentUserState.isLoggedIn && (
 							<Fragment>
 								<li className="nav-item mr-2 ml-2">
-									<NavLink to={'/article/new'} className="nav-link">
+									<NavLink to={'/articles/new'} className="nav-link">
 										<i className="ion-compose"></i>
 										New post
 									</NavLink>

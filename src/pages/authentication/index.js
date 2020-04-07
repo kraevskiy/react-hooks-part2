@@ -5,6 +5,7 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import useFetch from "../../hooks/useFetch"
 import {CurrentUserContext} from "../../context/curentUser/currentUserContext"
 import BackendErrorMessages from "./component/BackendErrorMessages"
+import {SET_AUTHORIZED} from "../../context/types"
 
 const Authentication = props => {
 	const isLogin = props.location.pathname === '/login'
@@ -18,7 +19,7 @@ const Authentication = props => {
 	const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false)
 	const [{response, isLoading, error}, doFetch] = useFetch(apiUrl)
 	const [, setToken] = useLocalStorage('token')
-	const [, setCurrentUserState] = useContext(CurrentUserContext)
+	const [, dispatch] = useContext(CurrentUserContext)
 
 
 	const handleSubmit = event => {
@@ -34,13 +35,11 @@ const Authentication = props => {
 		if (!response) return
 		setToken(response.user.token)
 		setIsSuccessfulSubmit(true)
-		setCurrentUserState(state => ({
-			...state,
-			isLoggedIn: true,
-			isLoading: false,
-			currentUser: response.user
-		}))
-	}, [response, setToken, setCurrentUserState])
+		dispatch({
+			type: SET_AUTHORIZED,
+			payload: response.user
+		})
+	}, [response, setToken, dispatch])
 
 	if (isSuccessfulSubmit) {
 		return <Redirect to='/'/>

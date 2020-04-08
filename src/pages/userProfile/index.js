@@ -5,6 +5,7 @@ import useFetch from "../../hooks/useFetch"
 import Loading from "../../components/Loading"
 import ErrorMessage from "../../components/ErrorMessage"
 import UserArticles from "./components/UserArticles"
+import FollowingBtn from "./components/FollowingBtn";
 
 const Index = ({match, location}) => {
   const slug = match.params.slug
@@ -33,6 +34,10 @@ const Index = ({match, location}) => {
               <img src={response.profile.image} className="user-img" alt=""/>
               <h4>{response.profile.username}</h4>
               <p>{response.profile.bio}</p>
+              <FollowingBtn
+                username={response.profile.username}
+                following={response.profile.following}
+              />
             </div>
           </div>
         </div>

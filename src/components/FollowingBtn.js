@@ -1,6 +1,6 @@
 import React from 'react'
 
-import useFetch from "../../../hooks/useFetch"
+import useFetch from "../hooks/useFetch"
 
 const FollowingBtn = ({username, following}) => {
   const apiUrl = `/profiles/${username}/follow`
@@ -14,6 +14,8 @@ const FollowingBtn = ({username, following}) => {
       : `Following ${username}`
   const isFollowingResponse = response ? response.profile.following : following
 
+  const cls = isFollowingResponse ? 'btn btn-sm action-btn btn-outline-secondary' : 'btn btn-sm action-btn btn-secondary'
+
   const handleFollowing = event => {
     event.preventDefault()
     doFetch({
@@ -23,7 +25,7 @@ const FollowingBtn = ({username, following}) => {
 
   return (
     <button
-      className="btn btn-sm action-btn btn-outline-secondary"
+      className={cls}
       onClick={handleFollowing}
     >
       <i className="ion-plus-round"/> &nbsp;

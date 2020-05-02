@@ -2,7 +2,7 @@ import React from 'react'
 
 import useFetch from "../hooks/useFetch"
 
-const AddToFavorites = ({isFavorited, favoritesCount, articleSlug}) => {
+const AddToFavorites = ({isFavorited, favoritesCount, articleSlug, doFetchProps}) => {
   const apiUrl = `/articles/${articleSlug}/favorite`
   const [{response}, doFetch] = useFetch(apiUrl)
   const favoritesCountWithResponse = response ? response.article.favoritesCount : favoritesCount
@@ -14,6 +14,7 @@ const AddToFavorites = ({isFavorited, favoritesCount, articleSlug}) => {
         ? 'btn btn-sm btn-primary'
         : 'btn btn-sm btn-outline-primary'
   const isFavoritedIsResponse = response ? response.article.favorited : isFavorited
+
   const handleLike = event => {
     event.preventDefault()
     doFetch({

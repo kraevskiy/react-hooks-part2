@@ -45,7 +45,7 @@ const TopBar = () => {
 											currentUserState.currentUser.image && (
 												<img
 													src={currentUserState.currentUser.image}
-													className="rounded"
+													className="rounded user-pic"
 													style={{
 														maxWidth: 100
 													}}

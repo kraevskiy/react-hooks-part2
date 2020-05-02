@@ -1,28 +1,30 @@
-import React, {useContext, useEffect, useState} from "react"
+import React, {useContext, useEffect, useState, Fragment} from "react"
 import useFetch from "../../hooks/useFetch"
-import {Link, Redirect} from "react-router-dom"
+import {Redirect} from "react-router-dom"
 import Loading from "../../components/Loading"
 import ErrorMessage from "../../components/ErrorMessage"
 import TagList from "../../components/TagList"
 import {CurrentUserContext} from "../../context/curentUser/currentUserContext"
+import Actions from "./components/Action"
+import Comments from "./components/Comments/Comments"
 
 const Article = props => {
   const slug = props.match.params.slug
   const apiUrl = `/articles/${slug}`
   const [
-  	{
-  		response: fetchArticleResponse,
-			error: fetshArticleError,
-			isLoading: fetchArticleIsLoading
-		},
-		doFetch] = useFetch(apiUrl)
+    {
+      response: fetchArticleResponse,
+      error: fetshArticleError,
+      isLoading: fetchArticleIsLoading
+    },
+    doFetch] = useFetch(apiUrl)
   const [
-  	{
-  		response: deleteArticleResponse
-		},
-		doDeleteArticle] = useFetch(apiUrl)
+    {
+      response: deleteArticleResponse
+    },
+    doDeleteArticle] = useFetch(apiUrl)
   const [currentUserState] = useContext(CurrentUserContext)
-	const [isSuccessfullDelete, setIsSuccessfullDelete] = useState(false)
+  const [isSuccessfullDelete, setIsSuccessfullDelete] = useState(false)
 
   const isAuthor = () => {
     if (!fetchArticleResponse || !currentUserState.isLoggedIn) {
@@ -33,61 +35,39 @@ const Article = props => {
 
   const deleteArticle = () => {
     doDeleteArticle({
-			method: 'delete'
-		})
+      method: 'delete'
+    })
   }
+
+
 
   useEffect(() => {
     doFetch()
   }, [doFetch])
 
-	useEffect(()=>{
-		if(!deleteArticleResponse){
-			return
-		}
-		setIsSuccessfullDelete(true)
-	}, [deleteArticleResponse])
+  useEffect(() => {
+    if (!deleteArticleResponse) {
+      return
+    }
+    setIsSuccessfullDelete(true)
+  }, [deleteArticleResponse])
 
-	if(isSuccessfullDelete){
-		return <Redirect to={'/'}/>
-	}
+  if (isSuccessfullDelete) {
+    return <Redirect to={'/'}/>
+  }
 
-	return (
+  return (
     <div className='article-page'>
       <div className="banner">
         {!fetchArticleIsLoading && fetchArticleResponse && (
           <div className='container'>
             <h1>{fetchArticleResponse.article.title}</h1>
-            <div className="article-meta">
-              <Link to={`/profiles/${fetchArticleResponse.article.author.username}`}>
-                <img src={fetchArticleResponse.article.author.image} alt={fetchArticleResponse.article.author.username}/>
-              </Link>
-              <div className="info">
-                <Link to={`/profiles/${fetchArticleResponse.article.author.username}`}>
-                  {fetchArticleResponse.article.author.username}
-                </Link>
-                <span className="date">
-									{fetchArticleResponse.article.createdAt}
-								</span>
-              </div>
-              {isAuthor() && (
-                <span>
-									<Link
-                    className='btn btn-outline-secondary btn-sm'
-                    to={`/articles/${fetchArticleResponse.article.slug}/edit`}>
-										<i className="ion-edit"/>
-										Edit article
-									</Link>
-									<button
-                    className='btn btn-sm btn-outline-danger'
-                    onClick={deleteArticle}
-                  >
-										<i className="ion-trash-a"/>
-										Delete article
-									</button>
-								</span>
-              )}
-            </div>
+            <Actions
+              author={isAuthor()}
+              article={fetchArticleResponse.article}
+              deleteArticle={deleteArticle}
+              doFetch={doFetch}
+            />
           </div>
         )}
       </div>
@@ -103,6 +83,24 @@ const Article = props => {
               <TagList tags={fetchArticleResponse.article.tagList}/>
             </div>
           </div>
+        )}
+        {!fetchArticleIsLoading && fetchArticleResponse && (
+          <Fragment>
+            <hr/>
+            <div className="article-actions">
+              <Actions
+                author={isAuthor()}
+                article={fetchArticleResponse.article}
+                deleteArticle={deleteArticle}
+                doFetch={doFetch}
+              />
+            </div>
+          </Fragment>
+        )}
+        {currentUserState.isLoggedIn && !fetchArticleIsLoading && fetchArticleResponse && (
+          <Comments
+            slug={fetchArticleResponse.article.slug}
+          />
         )}
       </div>
     </div>

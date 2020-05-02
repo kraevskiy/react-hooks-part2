@@ -10,7 +10,7 @@ const ArticleForm = ({onSubmit, errors, initialValues}) => {
   const handleSubmit = event => {
     event.preventDefault()
     const article = {
-      title,body,description,tagList
+      title,body,description,tagList: tagList.split(' ')
     }
     onSubmit(article)
   }
